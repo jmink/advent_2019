@@ -5,13 +5,13 @@ class Intcode
   MULTIPLY = 2
 
   def self.process(codes)
-    index = 0
-    while(codes[index] != EXIT) do
-      if codes.length < index+3
-        raise "Malformed instruction: requires out of bounds index"
+    address = 0
+    while(codes[address] != EXIT) do
+      if codes.length < address+3
+        raise "Malformed instruction: requires out of bounds address"
       end
 
-      math = case codes[index] 
+      instruction = case codes[address] 
         when ADD
           lambda { |a,b| a + b }
         when MULTIPLY
@@ -19,8 +19,8 @@ class Intcode
         else
 	  raise "unknown function #{opcode}"
       end
-      codes = apply(math, codes, codes[index+1], codes[index+2], codes[index+3])
-      index += 4
+      codes = apply(instruction, codes, codes[address+1], codes[address+2], codes[address+3])
+      address += 4
     end
     codes
   end
